@@ -1,0 +1,42 @@
+{
+  "departments": {
+    "Billing": {
+      "keywords": [
+        "bill", "billing", "charge", "overcharge", "duplicate charge",
+        "refund", "invoice", "payment", "insurance", "claim", "amount",
+        "receipt", "fee", "cost", "price", "rupees", "rs.", "money",
+        "deduct", "deducted", "extra charge", "wrong amount"
+      ],
+      "description": "Handles billing disputes, refunds, invoices, and payment queries",
+      "default_assignee": "Billing Team"
+    },
+    "Scheduling": {
+      "keywords": [
+        "appointment", "follow-up", "followup", "schedule", "booking",
+        "consultation", "doctor", "visit", "checkup", "check-up",
+        "reschedule", "cancel appointment", "date", "time slot",
+        "next visit", "review", "not called", "no call"
+      ],
+      "description": "Handles appointment bookings, follow-ups, and scheduling",
+      "default_assignee": "Outpatient Scheduling"
+    },
+    "Pharmacy": {
+      "keywords": [
+        "medicine", "medication", "drug", "prescription", "tablet",
+        "capsule", "injection", "refill", "pharmacy", "dosage",
+        "out of stock", "not available", "syrup", "ointment"
+      ],
+      "description": "Handles prescription queries and medicine availability",
+      "default_assignee": "Pharmacy Team"
+    },
+    "Admin": {
+      "keywords": [
+        "complaint", "feedback", "record", "report", "discharge",
+        "summary", "certificate", "document", "transfer", "admission",
+        "room", "ward", "staff", "nurse", "rude", "behaviour"
+      ],
+      "description": "Handles admin, complaints, records, and general queries",
+      "default_assignee": "Admin Office"
+    }
+  }
+}
