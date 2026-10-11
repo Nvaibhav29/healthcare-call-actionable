@@ -18,9 +18,8 @@ _lock = threading.Lock()
 # Urdu Nastaliq range — same guard used in sarvam_api.py
 _URDU_SCRIPT_RE = re.compile(r"[\u0600-\u06FF]")
 
-# Whisper model to load — large-v3 gives far better Hindi/Kannada accuracy.
-# Falls back to "medium" if VRAM is too small.
-WHISPER_MODEL = "large-v3"
+# Whisper model to load — lightweight base model (145MB)
+WHISPER_MODEL = "base"
 
 # Seed prompt for Hindi: anchors Whisper to Devanagari script context
 # so it outputs Hindi (हिन्दी) rather than Urdu (اردو).
@@ -34,13 +33,9 @@ def _load_model():
     global _model
     with _lock:
         if _model is None:
-            try:
-                logger.info(f"Loading Whisper model: {WHISPER_MODEL}")
-                _model = whisper.load_model(WHISPER_MODEL)
-                logger.info(f"Whisper {WHISPER_MODEL} loaded.")
-            except Exception as e:
-                logger.warning(f"Failed to load {WHISPER_MODEL}: {e} — falling back to medium")
-                _model = whisper.load_model("medium")
+            logger.info(f"Loading Whisper model: {WHISPER_MODEL}")
+            _model = whisper.load_model(WHISPER_MODEL)
+            logger.info(f"Whisper {WHISPER_MODEL} loaded.")
     return _model
 
 
