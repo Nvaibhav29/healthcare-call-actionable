@@ -10,6 +10,8 @@ import whisper
 import threading
 import logging
 
+import torch
+
 logger = logging.getLogger(__name__)
 
 _model = None
@@ -19,7 +21,6 @@ _lock = threading.Lock()
 _URDU_SCRIPT_RE = re.compile(r"[\u0600-\u06FF]")
 
 # Whisper model to load — large-v3 gives far better Hindi/Kannada accuracy.
-# Falls back to "medium" if VRAM is too small.
 WHISPER_MODEL = "large-v3"
 
 # Seed prompt for Hindi: anchors Whisper to Devanagari script context
@@ -30,26 +31,33 @@ _HINDI_INITIAL_PROMPT = (
 )
 
 
+def _get_device() -> str:
+    return "cuda" if torch.cuda.is_available() else "cpu"
+
+
 def _load_model():
     global _model
     with _lock:
         if _model is None:
+            device = _get_device()
+            gpu_name = torch.cuda.get_device_name(0) if device == "cuda" else "CPU"
+            logger.info(f"Loading Whisper model '{WHISPER_MODEL}' on {device} ({gpu_name})")
             try:
-                logger.info(f"Loading Whisper model: {WHISPER_MODEL}")
-                _model = whisper.load_model(WHISPER_MODEL)
-                logger.info(f"Whisper {WHISPER_MODEL} loaded.")
+                _model = whisper.load_model(WHISPER_MODEL, device=device)
+                logger.info(f"Whisper {WHISPER_MODEL} loaded successfully on {device} ({gpu_name}).")
             except Exception as e:
-                logger.warning(f"Failed to load {WHISPER_MODEL}: {e} — falling back to medium")
-                _model = whisper.load_model("medium")
+                logger.warning(f"Failed to load {WHISPER_MODEL} on {device}: {e} — falling back to medium")
+                _model = whisper.load_model("medium", device=device)
     return _model
 
 
 def transcribe(audio_path: str, language: str = None) -> dict:
+    device = _get_device()
     model = _load_model()
 
-    # Build decode options
+    # Build decode options — enable fp16 on CUDA for maximum speed and 3GB VRAM footprint
     options = {
-        "fp16": False,
+        "fp16": (device == "cuda"),
         "task": "transcribe",
         "beam_size": 5,
         "best_of": 5,
