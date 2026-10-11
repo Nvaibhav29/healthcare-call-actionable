@@ -5,6 +5,7 @@ Uses large-v3 for significantly better Indian-language accuracy.
 Hindi audio gets a Devanagari initial_prompt so Whisper prefers
 Hindi script over Urdu/Arabic Nastaliq, which base models confuse.
 """
+import os
 import re
 import whisper
 import threading
@@ -20,8 +21,8 @@ _lock = threading.Lock()
 # Urdu Nastaliq range — same guard used in sarvam_api.py
 _URDU_SCRIPT_RE = re.compile(r"[\u0600-\u06FF]")
 
-# Whisper model to load — large-v3 gives far better Hindi/Kannada accuracy.
-WHISPER_MODEL = "large-v3"
+# Whisper model to load — default to existing lightweight "base" model
+WHISPER_MODEL = os.getenv("WHISPER_MODEL", "base")
 
 # Seed prompt for Hindi: anchors Whisper to Devanagari script context
 # so it outputs Hindi (हिन्दी) rather than Urdu (اردو).
@@ -46,8 +47,8 @@ def _load_model():
                 _model = whisper.load_model(WHISPER_MODEL, device=device)
                 logger.info(f"Whisper {WHISPER_MODEL} loaded successfully on {device} ({gpu_name}).")
             except Exception as e:
-                logger.warning(f"Failed to load {WHISPER_MODEL} on {device}: {e} — falling back to medium")
-                _model = whisper.load_model("medium", device=device)
+                logger.warning(f"Failed to load {WHISPER_MODEL} on {device}: {e} — falling back to base")
+                _model = whisper.load_model("base", device=device)
     return _model
 
 
