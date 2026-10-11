@@ -23,7 +23,7 @@ async def list_calls(
 
     resp = (
         db.table("calls")
-        .select("id, created_at, audio_filename, duration_seconds, language_detected, sentiment, ai_summary, asr_provider, llm_provider, needs_review, status")
+        .select("id, created_at, audio_filename, duration_seconds, language_detected, patient_name, patient_id, sentiment, ai_summary, asr_provider, llm_provider, needs_review, status")
         .order("created_at", desc=True)
         .range(offset, offset + per_page - 1)
         .execute()

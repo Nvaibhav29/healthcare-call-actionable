@@ -29,6 +29,16 @@
       "description": "Handles prescription queries and medicine availability",
       "default_assignee": "Pharmacy Team"
     },
+    "Clinical": {
+      "keywords": [
+        "pain", "fever", "breathless", "chest pain", "bleeding",
+        "symptoms", "worse", "worsening", "infection", "wound",
+        "test result", "lab report", "blood report", "scan result",
+        "side effect", "allergic", "reaction", "nurse", "doctor urgent"
+      ],
+      "description": "Handles urgent symptoms, medical questions, and test result queries",
+      "default_assignee": "Clinical Duty Nurse"
+    },
     "Admin": {
       "keywords": [
         "complaint", "feedback", "record", "report", "discharge",

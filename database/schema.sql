@@ -7,6 +7,8 @@ create table if not exists calls (
     audio_filename      text,
     duration_seconds    int,
     language_detected   text,
+    patient_name        text,
+    patient_id          text,
     sentiment           text,           -- frustrated | neutral | satisfied
     sentiment_score     float,
     raw_transcript      text,

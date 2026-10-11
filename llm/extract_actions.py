@@ -54,11 +54,19 @@ def extract(transcript: str) -> dict:
         raise ValueError(f"LLM did not return valid JSON: {e}")
 
     # Validate & normalise required fields
+    data.setdefault("patient_name", None)
+    data.setdefault("patient_id", None)
     data.setdefault("summary", "")
     data.setdefault("sentiment", "neutral")
     data.setdefault("sentiment_score", 0.5)
     data.setdefault("language_detected", "unknown")
+    data.setdefault("urgent_clinical_flag", False)
+    data.setdefault("entities", {"medications": [], "doctors": [], "dates": [], "amounts": []})
     data.setdefault("actions", [])
+
+    # Remove evidence/debug fields the LLM may have written from the prompt rules
+    for key in ("patient_name_evidence", "patient_id_evidence", "caller_name", "caller_is_patient"):
+        data.pop(key, None)
 
     # Check if any action needs human review
     threshold = settings.confidence_threshold

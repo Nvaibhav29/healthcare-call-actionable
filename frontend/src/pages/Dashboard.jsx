@@ -128,7 +128,7 @@ export default function Dashboard() {
                           <tr>
                             <th>Time</th>
                             <th>Call ID</th>
-                            <th>Language</th>
+                            <th>Name</th>
                             <th>Sentiment</th>
                             <th>Actions</th>
                             <th>Status</th>
@@ -140,7 +140,7 @@ export default function Dashboard() {
                               onClick={() => navigate(`/calls/${c.id}`)}>
                               <td className="mono text-sm">{fmtTime(c.created_at)}</td>
                               <td className="mono text-sm">{fmtId(c.id)}</td>
-                              <td>{c.language_detected || '—'}</td>
+                              <td>{c.patient_name || '—'}</td>
                               <td>
                                 <span className={sentimentClass(c.sentiment)}>
                                   {c.sentiment ? c.sentiment.charAt(0).toUpperCase() + c.sentiment.slice(1) : '—'}
