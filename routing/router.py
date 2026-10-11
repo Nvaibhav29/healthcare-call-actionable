@@ -81,9 +81,6 @@ def route(extracted: dict) -> list[dict]:
             "confidence": confidence,
             "assigned_to": assignee,
             "status": "open",
-            "owner": raw.get("owner", "patient_request"),
-            "due_by": raw.get("due_by"),
-            "needs_human_review": raw.get("needs_human_review", False),
         })
 
     return enriched
